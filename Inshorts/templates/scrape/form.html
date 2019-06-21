@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>News choice</title>
+</head>
+
+<body>
+    
+        <div class="jumbotron jumbotron-fluid">
+                <div class="container" style='max-height: 1em; text-align: center'>
+                    <h1>Choose the articles</h1>      
+                    
+                </div>
+        </div>
+
+        <form action="{% url 'choose_date' %}" method="post">
+            {% csrf_token %}
+            <center><h5>Choose date:<input type="date" name='dated'></input>
+            <input type="submit" name="submit" value="Submit date"></h5></center>
+        </form>
+        <br><hr><br>
+
+        <form action="{% url 'store' %}" method="post">
+            {% csrf_token %}
+            <center><h3>National News</h3></center>
+            {% for article in national %}
+                <input type="checkbox" name="national" value='{{ article }}'> &nbsp;&nbsp;<b>{{ article.date }} </b><br>
+                {{ article.content }}
+                <br><br>
+            {% endfor %}
+            <br><br><hr><br><br>
+
+            <center><h3>Asia News</h3></center>
+            {% for article in asia %}
+                <input type="checkbox" name="asia" value='{{ article }}'> &nbsp;&nbsp;<b>{{ article.date }} </b><br>
+                {{ article.content }}
+                <br><br>
+            {% endfor %}
+            <br><br><hr><br><br>
+
+            <center><h3>World News</h3></center>
+            {% for article in world %}
+                <input type="checkbox" name="world" value='{{ article }}'> &nbsp;&nbsp;<b>{{ article.date }} </b><br>
+                {{ article.content }}
+                <br><br>
+            {% endfor %}
+            <br><br><hr><br><br>
+
+            <center><h3>Sports News</h3></center>
+            {% for article in sports %}
+                <input type="checkbox" name="sports" value='{{ article }}'> &nbsp;&nbsp;<b>{{ article.date }} </b><br>
+                {{ article.content }}
+                <br><br>
+            {% endfor %}
+            <br><br><hr><br>
+
+            <center><input type="submit" value="Submit Response"></center>
+            <br><br>
+        
+        </form>
+
+        
+</body>
+</html>
