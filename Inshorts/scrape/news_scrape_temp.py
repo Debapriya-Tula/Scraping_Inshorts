@@ -68,6 +68,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 
+from list_of_words import word_dict
+
 import spacy
 from spacy import displacy
 from collections import Counter
@@ -75,9 +77,43 @@ import en_core_web_sm
 
 
 
+
+from nltk.stem.porter import PorterStemmer
+from nltk.stem.wordnet import WordNetLemmatizer
+
+
 def randomString(stringLength):
     letters = string.ascii_letters
     return ''.join(random.choice(letters) for i in range(stringLength))
+
+
+import re
+def find_word_in_list(article):
+    lem = WordNetLemmatizer()
+    stem = PorterStemmer()
+
+    article = [re.sub("\n|'s", "", word) for word in article]
+    article = list(set([stem.stem(word) for word in article]))
+    article = list(set([lem.lemmatize(word) for word in article]))
+
+    for word in article:
+        if len(word) == 0:
+            continue
+            
+        if '*' in word:
+            return 0
+
+        if re.match('[a-z]', word[0]):
+            for match in word_dict[word[0]]:
+                if word in match:
+                    # print(word)
+                    return 0
+        else:
+            for match in word_dict['other']:
+                if word in match:
+                    return 0
+
+    return 1
 
 def scrape(dated=str(date.today())):
     nlp = en_core_web_sm.load()
@@ -134,16 +170,24 @@ def scrape(dated=str(date.today())):
                         continue
                     elif diff < 0:
                         break
-
             except AttributeError:
                 date = None
+
             try:
                 title = card.find(class_='news-card-title').find(class_='clickable').text
+                title = title.rstrip()
+                title_test = re.split(' |, |  |\t', title.lower())
+                if find_word_in_list(title_test) == 0:
+                    continue
             except AttributeError:
                 title = None
-                
+            
             try:
                 content = card.find(class_='news-card-content').find('div').text
+                content = content.rstrip()
+                content_test = re.split(' |, |  |\t', content.lower())
+                if find_word_in_list(content_test) == 0:
+                    continue
             except AttributeError:
                 content = None
             
