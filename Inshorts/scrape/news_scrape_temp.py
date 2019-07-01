@@ -78,7 +78,7 @@ import en_core_web_sm
 
 
 
-from nltk.stem.porter import PorterStemmer
+# from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 
 
@@ -90,11 +90,12 @@ def randomString(stringLength):
 import re
 def find_word_in_list(article):
     lem = WordNetLemmatizer()
-    stem = PorterStemmer()
+    # stem = PorterStemmer()
 
     article = [re.sub("\n|'s", "", word) for word in article]
-    article = list(set([stem.stem(word) for word in article]))
-    article = list(set([lem.lemmatize(word) for word in article]))
+    # article = list(set([stem.stem(word) for word in article]))
+    article = [[lem.lemmatize(word, pos=val) for val in ['a','n','r','s','v']] for word in article]
+    article = list(set([j for i in article for j in i]))
 
     for word in article:
         if len(word) == 0:
@@ -105,8 +106,8 @@ def find_word_in_list(article):
 
         if re.match('[a-z]', word[0]):
             for match in word_dict[word[0]]:
-                if word in match:
-                    # print(word)
+                if word == match:
+                    print(word)
                     return 0
         else:
             for match in word_dict['other']:
@@ -176,18 +177,18 @@ def scrape(dated=str(date.today())):
             try:
                 title = card.find(class_='news-card-title').find(class_='clickable').text
                 title = title.rstrip()
-                title_test = re.split(' |, |  |\t', title.lower())
-                if find_word_in_list(title_test) == 0:
-                    continue
+                # title_test = re.split(' |, |  |\t', title.lower())
+                # if find_word_in_list(title_test) == 0:
+                #     continue
             except AttributeError:
                 title = None
             
             try:
                 content = card.find(class_='news-card-content').find('div').text
                 content = content.rstrip()
-                content_test = re.split(' |, |  |\t', content.lower())
-                if find_word_in_list(content_test) == 0:
-                    continue
+                # content_test = re.split(' |, |  |\t', content.lower())
+                # if find_word_in_list(content_test) == 0:
+                    # continue
             except AttributeError:
                 content = None
             
