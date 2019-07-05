@@ -177,18 +177,18 @@ def scrape(dated=str(date.today())):
             try:
                 title = card.find(class_='news-card-title').find(class_='clickable').text
                 title = title.rstrip()
-                # title_test = re.split(' |, |  |\t', title.lower())
-                # if find_word_in_list(title_test) == 0:
-                #     continue
+                title_test = re.split(' |, |  |\t', title.lower())
+                if find_word_in_list(title_test) == 0:
+                    continue
             except AttributeError:
                 title = None
             
             try:
                 content = card.find(class_='news-card-content').find('div').text
                 content = content.rstrip()
-                # content_test = re.split(' |, |  |\t', content.lower())
-                # if find_word_in_list(content_test) == 0:
-                    # continue
+                content_test = re.split(' |, |  |\t', content.lower())
+                if find_word_in_list(content_test) == 0:
+                    continue
             except AttributeError:
                 content = None
             
