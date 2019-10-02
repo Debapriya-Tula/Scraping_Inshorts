@@ -17,5 +17,5 @@ This can thus be used to acquire data for use in some classification tasks.
 I built this tool primarily to select news suitable for school children(cuss words are taken care of!).
 
 
-
+Please note: If you want to empty the json files, you can do so. But make sure you the file then contains a '[]' (as is now).
 
